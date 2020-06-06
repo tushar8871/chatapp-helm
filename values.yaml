@@ -1,0 +1,21 @@
+replicacount: 1
+
+Deployments:
+  app_name: chatapplication
+  app_env: postgres-config
+  db_name: database1
+  app_port: 8000
+  db_port: 5432
+  app_url: 760496128264.dkr.ecr.ap-south-1.amazonaws.com/chatapp:chatapp13_chat
+  db_url: 760496128264.dkr.ecr.ap-south-1.amazonaws.com/chatapp:database1
+  vol_name: postgredb
+  app_replicas: 1
+  db_replicas: 1
+  vol_claim_req_storage: 5Gi
+
+Service:
+  app_name: chatapplication
+  db_name: database1
+  app_target_port: 8000
+  app_svc: 80
+  db_svc: 5432

@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: postgres-config
+  labels:
+    app: database1
+data:
+  POSTGRES_DB: chatApp
+  POSTGRES_USER: postgres
+  POSTGRES_PASSWORD: "*admin123"
+
+
