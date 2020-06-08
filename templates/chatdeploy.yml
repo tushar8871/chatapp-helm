@@ -3,16 +3,16 @@ kind: Deployment
 metadata:
    name: chat-deployment
    labels:
-     app: chatapplication
+     app: {{ .Values.Deployments.app_name }}
 spec:
-   #replicas: 2
+   replicas: {{ .Values.Deployments.app_replicas }}
    selector:
      matchLabels:
-       app: chatapplication
+       app: {{ .Values.Deployments.app_name }}
    template:
      metadata:
        labels:
-         app: chatapplication
+         app: {{ .Values.Deployments.app_name }}
      spec:
        affinity:
          nodeAffinity:
@@ -22,8 +22,8 @@ spec:
                - key: name
                  operator: In
                  values:
-                 - worker1
-                 - worker2
+                 - kworker1
+                 - kworker2
          podAntiAffinity:
            requiredDuringSchedulingIgnoredDuringExecution:
            - labelSelector:
@@ -31,16 +31,16 @@ spec:
                - key: app
                  operator: In
                  values:
-                 - chatapplication
+                 - {{ .Values.Deployments.app_name }}
              topologyKey: "kubernetes.io/hostname"
        containers:
-       - name: chatapplication
-         image: 760496128264.dkr.ecr.ap-south-1.amazonaws.com/chatapp:chatapp13_chat
+       - name: {{ .Values.Deployments.app_name }}
+         image: {{ .Values.Deployments.app_url }}
          envFrom:
          - configMapRef:
-             name: postgres-config
+             name: {{ .Values.Deployments.app_env }}
          ports:
-         - containerPort: 8000 
+         - containerPort: {{ .Values.Deployments.app_port }}
          resources: 
            limits: 
              cpu: 250m

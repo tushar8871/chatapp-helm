@@ -4,33 +4,33 @@ metadata:
   name: postgres
 spec:
   serviceName: database1
-  replicas: 1
+  replicas: {{ .Values.Deployments.db_replicas }}
   selector:
     matchLabels:
-      app: database1
+      app: {{ .Values.Deployments.db_name }}
   template:
     metadata:
       labels:
-        app: database1
+        app: {{ .Values.Deployments.db_name }}
     spec:
       containers:
-      - name: database1
-        image: 760496128264.dkr.ecr.ap-south-1.amazonaws.com/chatapp:database1
+      - name: {{ .Values.Deployments.db_name }}
+        image: {{ .Values.Deployments.db_url }}
         envFrom:
           - configMapRef:
-              name: postgres-config
+              name: {{ .Values.Deployments.app_env }}
         ports:
-        - containerPort: 5432
+        - containerPort: {{ .Values.Deployments.db_port }}
         volumeMounts:
-        - name: postgredb
+        - name: {{ .Values.Deployments.vol_name }}
           mountPath: /var/lib/postgresql/data
           subPath: postgres
   volumeClaimTemplates:
   - metadata:
-      name: postgredb
+      name: {{ .Values.Deployments.vol_name }}
     spec:
       accessModes: [ "ReadWriteOnce" ]
       storageClassName: gp2
       resources:
         requests:
-          storage: 5Gi
+          storage: {{ .Values.Deployments.vol_claim_req_storage }}
