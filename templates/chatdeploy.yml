@@ -15,15 +15,15 @@ spec:
          app: {{ .Values.Deployments.app_name }}
      spec:
        affinity:
-         nodeAffinity:
-           requiredDuringSchedulingIgnoredDuringExecution:
-             nodeSelectorTerms:
-             - matchExpressions:
-               - key: name
-                 operator: In
-                 values:
-                 - kworker1
-                 - kworker2
+#         nodeAffinity:
+#           requiredDuringSchedulingIgnoredDuringExecution:
+#             nodeSelectorTerms:
+#             - matchExpressions:
+#               - key: name
+#                 operator: In
+#                 values:
+#                 - kworker1
+#                 - kworker2
          podAntiAffinity:
            requiredDuringSchedulingIgnoredDuringExecution:
            - labelSelector:
@@ -36,6 +36,7 @@ spec:
        containers:
        - name: {{ .Values.Deployments.app_name }}
          image: {{ .Values.Deployments.app_url }}
+         imagePullPolicy: Always
          envFrom:
          - configMapRef:
              name: {{ .Values.Deployments.app_env }}
@@ -43,4 +44,6 @@ spec:
          - containerPort: {{ .Values.Deployments.app_port }}
          resources: 
            limits: 
+             cpu: 500m
+           requests:
              cpu: 250m
